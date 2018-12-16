@@ -21,7 +21,7 @@ namespace CPUfreq {
 
         public void add_label (double freq_val) {
             if (freq_val == 0) {
-                label = "off";
+                label = _("off");
             } else {
                 label =  Utils.format_frequency (freq_val);
             }

@@ -13,6 +13,7 @@
 */
 
 namespace CPUfreq {
+    public const string CPU_PATH = "/sys/devices/system/cpu/";
     public class Utils {
         public static string get_content (string file_path) {
             string content;
@@ -25,6 +26,54 @@ namespace CPUfreq {
             }
 
             return content.chomp ();
+        }
+
+        public static double get_freq_pct (string adv) {
+            double state_freq_pct = CPUfreq.Services.Settings.get_default ().get_double(@"pstate-$adv");
+            if (state_freq_pct == 0) {
+                string cur_freq_pct = Utils.get_content (CPU_PATH + "intel_pstate/" + adv + "_perf_pct");
+                state_freq_pct = double.parse (cur_freq_pct);
+            }
+
+            return state_freq_pct;
+        }
+
+        public static string get_governor (bool def_val = false) {
+            string def_governor = Utils.get_content ((CPU_PATH + "cpu0/cpufreq/scaling_governor"));
+            if (def_val) {
+                return def_governor;
+            }
+            string sets_governor = CPUfreq.Services.Settings.get_default ().get_string("governor");
+
+            if (sets_governor == "") {
+                return def_governor;
+            }
+            return sets_governor;
+        }
+
+        public static string[] get_available_values (string path) {
+            string val_str = Utils.get_content (CPU_PATH + @"cpu0/cpufreq/scaling_available_$path");
+            return val_str.split (" ");
+        }
+
+        public static double get_cur_frequency () {
+            string cur_value;
+            double maxcur = 0;
+
+            for (uint i = 0, isize = (int)get_num_processors (); i < isize; ++i) {
+                cur_value = Utils.get_content (CPU_PATH + @"cpu$i/cpufreq/scaling_cur_freq");
+
+                if (cur_value == "") {continue;}
+                var cur = double.parse (cur_value);
+
+                if (i == 0) {
+                    maxcur = cur;
+                } else {
+                    maxcur = double.max (cur, maxcur);
+                }
+            }
+
+            return maxcur;
         }
 
         public static void run_cli (string cmd_par) {

@@ -1,11 +1,19 @@
 project(
     'cpufreq',
     ['c', 'vala'],
-    version: '0.1.0',
+    version: '0.3.0',
     license: 'GPL-2.0',
     default_options: [
         'c_std=c11',
     ],
+)
+
+gettext_name = meson.project_name() + '-indicator'
+i18n = import('i18n')
+
+add_global_arguments(
+    '-DGETTEXT_PACKAGE="@0@"'.format(gettext_name),
+    language:'c'
 )
 
 wingpanel_dep = dependency('wingpanel-2.0')

@@ -15,7 +15,9 @@
 namespace CPUfreq {
     public class Services.FreqManager : GLib.Object {
         public static void set_turbo_boost (bool state) {
-            if (Utils.get_permission ().allowed) {
+            string state_str = state ? "0" : "1";
+            string def_boost = Utils.get_content (CPU_PATH + "intel_pstate/no_turbo");
+            if (def_boost != state_str && Utils.get_permission ().allowed) {
                 string cli_cmd = "-t ";
                 if (state) {
                     cli_cmd += "on";
@@ -29,28 +31,8 @@ namespace CPUfreq {
             return;
         }
 
-        public static double get_cur_frequency () {
-            string cur_value;
-            double maxcur = 0;
-
-            for (uint i = 0, isize = (int)get_num_processors (); i < isize; ++i) {
-                cur_value = Utils.get_content (@"/sys/devices/system/cpu/cpu$i/cpufreq/scaling_cur_freq");
-
-                if (cur_value == "") {continue;}
-                var cur = double.parse (cur_value);
-
-                if (i == 0) {
-                    maxcur = cur;
-                } else {
-                    maxcur = double.max (cur, maxcur);
-                }
-            }
-
-            return maxcur;
-        }
-
         public static void set_freq_scaling (string adv, double new_val) {
-            if (Utils.get_permission ().allowed) {
+            if (Utils.get_freq_pct (adv) != new_val && Utils.get_permission ().allowed) {
                 if (new_val >= 25 && new_val <= 100) {
                     string cli_cmd = " -f %s:%.0f".printf(adv, new_val);
                     Utils.run_cli (cli_cmd);
@@ -61,7 +43,8 @@ namespace CPUfreq {
         }
 
         public static void set_governor (string governor) {
-            if (governor != "") {
+            string def_governor = Utils.get_governor (true);
+            if (governor != "" && def_governor != governor) {
                 string cli_cmd = " -g " + governor;
                 Utils.run_cli (cli_cmd);
             }
