@@ -1,7 +1,7 @@
 project(
     'cpufreq',
     ['c', 'vala'],
-    version: '0.3.0',
+    version: '1.0.0',
     license: 'GPL-2.0',
     default_options: [
         'c_std=c11',
@@ -25,5 +25,6 @@ dep_granie = dependency('granite')
 
 subdir('data')
 subdir('src')
+subdir('po')
 
 meson.add_install_script('meson/meson_post_install.py')

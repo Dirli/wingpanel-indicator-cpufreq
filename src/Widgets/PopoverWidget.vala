@@ -26,7 +26,7 @@ namespace CPUfreq {
             settings = CPUfreq.Services.Settings.get_default ();
 
             if (!FileUtils.test(CPU_PATH + "cpu0/cpufreq", FileTest.IS_DIR)) {
-                Gtk.Label label = new Gtk.Label (_("Your system does not support cpufreq"));
+                Gtk.Label label = new Gtk.Label (_("Your system does not support cpufreq manage"));
                 label.get_style_context ().add_class ("h2");
                 label.sensitive = false;
                 label.margin_top = label.margin_bottom = 24;
@@ -35,7 +35,7 @@ namespace CPUfreq {
             } else {
                 string freq_driver = Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_driver");
                 if (freq_driver != "intel_pstate") {
-                    /* not yet implemented */
+                    debug ("not yet implemented");
                     available_freqs = Utils.get_available_values ("frequencies");
                 } else {
                     add_turbo_boost ();
