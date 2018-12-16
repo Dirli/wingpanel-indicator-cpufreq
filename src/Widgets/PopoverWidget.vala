@@ -15,7 +15,6 @@
 namespace CPUfreq {
     public class Widgets.PopoverWidget : Gtk.Grid {
         private int top = 0;
-        private string[] available_freqs;
         private CPUfreq.Services.Settings settings;
 
         public PopoverWidget () {
@@ -36,7 +35,7 @@ namespace CPUfreq {
                 string freq_driver = Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_driver");
                 if (freq_driver != "intel_pstate") {
                     debug ("not yet implemented");
-                    available_freqs = Utils.get_available_values ("frequencies");
+                    string[] available_freqs = Utils.get_available_values ("frequencies");
                 } else {
                     add_turbo_boost ();
                 }
@@ -126,8 +125,6 @@ namespace CPUfreq {
             max_scale.value_changed.connect (() => {
                 settings.set_double ("pstate-max", max_scale.get_value ());
             });
-
-            return;
         }
     }
 }

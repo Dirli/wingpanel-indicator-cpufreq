@@ -14,6 +14,7 @@
 
 namespace CPUfreq {
     public const string CPU_PATH = "/sys/devices/system/cpu/";
+
     public class Utils {
         public static string get_content (string file_path) {
             string content;
@@ -92,6 +93,7 @@ namespace CPUfreq {
             } catch (Error e) {
                 warning (e.message);
             }
+
             return;
         }
 

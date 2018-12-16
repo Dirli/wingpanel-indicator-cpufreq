@@ -27,8 +27,6 @@ namespace CPUfreq {
 
                 Utils.run_cli (cli_cmd);
             }
-
-            return;
         }
 
         public static void set_freq_scaling (string adv, double new_val) {
@@ -38,8 +36,6 @@ namespace CPUfreq {
                     Utils.run_cli (cli_cmd);
                 }
             }
-
-            return;
         }
 
         public static void set_governor (string governor) {
@@ -48,8 +44,6 @@ namespace CPUfreq {
                 string cli_cmd = " -g " + governor;
                 Utils.run_cli (cli_cmd);
             }
-
-            return;
         }
     }
 }

@@ -90,7 +90,6 @@ public class CPUfreq.Indicator : Wingpanel.Indicator {
 
 public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorManager.ServerType server_type) {
     debug ("Activating CPUFreq Indicator");
-
     if (server_type != Wingpanel.IndicatorManager.ServerType.SESSION) {
         return null;
     }
