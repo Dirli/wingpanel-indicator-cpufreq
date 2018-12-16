@@ -1,6 +1,12 @@
 # Wingpanel CPU frequency indicator
 wingpanel-indicator-cpufreq is able to adjust the Intel p-state driver (Sandy Bridge and newer)
 
+![Screenshot](data/screenshot1.png)  
+
+### Popover
+![Screenshot](data/screenshot2.png)  
+
+---
 
 ## Building and Installation
 
