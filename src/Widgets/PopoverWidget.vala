@@ -16,6 +16,8 @@ namespace CPUfreq {
     public class Widgets.PopoverWidget : Gtk.Grid {
         private int top = 0;
         private CPUfreq.Services.Settings settings;
+        private Granite.Widgets.ModeButton gov_box;
+        private string[] gov_vars;
 
         public PopoverWidget () {
             orientation = Gtk.Orientation.HORIZONTAL;
@@ -35,7 +37,7 @@ namespace CPUfreq {
                 string freq_driver = Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_driver");
                 if (freq_driver != "intel_pstate") {
                     debug ("not yet implemented");
-                    string[] available_freqs = Utils.get_available_values ("frequencies");
+                    /* string[] available_freqs = Utils.get_available_values ("frequencies"); */
                 } else {
                     add_turbo_boost ();
                 }
@@ -51,33 +53,29 @@ namespace CPUfreq {
             attach (separator, 0, top, 2, 1);
             ++top;
 
-            Gtk.RadioButton? button1 = null;
+            gov_box = new Granite.Widgets.ModeButton ();
+            gov_box.orientation = Gtk.Orientation.VERTICAL;
+            gov_vars = new string[10];
 
             foreach (string gov in Utils.get_available_values ("governors")) {
-                Gtk.RadioButton button;
                 gov = gov.chomp ();
+                int i = gov_box.append_text (gov);
 
-                button = new Gtk.RadioButton.with_label_from_widget (button1, gov);
-                button.margin_start = button.margin_end = 15;
-                button.margin_bottom = 10;
-                button.halign = Gtk.Align.START;
-                button.valign = Gtk.Align.CENTER;
-                attach (button, 0, top, 2, 1);
-                ++top;
-
-                if (button1 == null) {button1 = button;}
                 if (gov == current_governor) {
-                    button.set_active (true);
+                    gov_box.selected = i;
                 }
-                button.toggled.connect (toggled_governor);
+
+                gov_vars[i] = gov;
             }
+
+            attach (gov_box, 0, top, 2, 1);
+            ++top;
+            gov_box.mode_changed.connect (toggled_governor);
         }
 
-        private unowned void toggled_governor (Gtk.ToggleButton button) {
+        private unowned void toggled_governor () {
             if (Utils.get_permission ().allowed) {
-                if (button.get_active ()) {
-                    settings.set_string("governor", button.label);
-                }
+                settings.set_string("governor", gov_vars[gov_box.selected]);
             }
         }
 

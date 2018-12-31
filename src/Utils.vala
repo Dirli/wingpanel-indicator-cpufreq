@@ -30,26 +30,12 @@ namespace CPUfreq {
         }
 
         public static double get_freq_pct (string adv) {
-            double state_freq_pct = CPUfreq.Services.Settings.get_default ().get_double(@"pstate-$adv");
-            if (state_freq_pct == 0) {
-                string cur_freq_pct = Utils.get_content (CPU_PATH + "intel_pstate/" + adv + "_perf_pct");
-                state_freq_pct = double.parse (cur_freq_pct);
-            }
-
-            return state_freq_pct;
+            string cur_freq_pct = Utils.get_content (CPU_PATH + "intel_pstate/" + adv + "_perf_pct");
+            return double.parse (cur_freq_pct);
         }
 
         public static string get_governor (bool def_val = false) {
-            string def_governor = Utils.get_content ((CPU_PATH + "cpu0/cpufreq/scaling_governor"));
-            if (def_val) {
-                return def_governor;
-            }
-            string sets_governor = CPUfreq.Services.Settings.get_default ().get_string("governor");
-
-            if (sets_governor == "") {
-                return def_governor;
-            }
-            return sets_governor;
+            return Utils.get_content ((CPU_PATH + "cpu0/cpufreq/scaling_governor"));
         }
 
         public static string[] get_available_values (string path) {
