@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema path="/com/github/dirli/wingpanel/indicator/cpufreq/" id="com.github.dirli.wingpanel.indicator.cpufreq">
+  <schema path="/io/elementary/desktop/wingpanel/cpufreq/" id="io.elementary.desktop.wingpanel.cpufreq">
       <key type="b" name="turbo-boost">
         <default>true</default>
         <summary>Turbo boost</summary>

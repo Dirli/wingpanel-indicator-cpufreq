@@ -6,7 +6,7 @@
   <vendor>Dirli</vendor>
   <vendor_url>https://github.com/Dirli/wingpanel-indicator-cpufreq/</vendor_url>
 
-  <action id="com.guthub.dirli.wingpanel.cpufreq.setcpufreq">
+  <action id="io.elementary.wingpanel.cpufreq.setcpufreq">
     <description>Manage cpu frequency settings</description>
     <message>Authentication is required to cpu frequency settings</message>
     <defaults>

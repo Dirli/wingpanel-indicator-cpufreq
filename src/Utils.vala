@@ -90,7 +90,7 @@ namespace CPUfreq {
             }
 
             try {
-                permission = new Polkit.Permission.sync ("com.guthub.dirli.wingpanel.cpufreq.setcpufreq", new Polkit.UnixProcess (Posix.getpid ()));
+                permission = new Polkit.Permission.sync ("io.elementary.wingpanel.cpufreq.setcpufreq", new Polkit.UnixProcess (Posix.getpid ()));
                 return permission;
             } catch (Error e) {
                 critical (e.message);

@@ -16,7 +16,7 @@ public class CPUfreq.Services.Settings : GLib.Settings {
     private static Settings ? instance = null;
 
     private Settings () {
-        Object(schema_id: "com.github.dirli.wingpanel.indicator.cpufreq");
+        Object(schema_id: "io.elementary.desktop.wingpanel.cpufreq");
     }
 
     public static Settings get_default () {
