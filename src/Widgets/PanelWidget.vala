@@ -15,6 +15,7 @@
 namespace CPUfreq {
     public class WIdgets.PanelWidget : Gtk.Label {
         public PanelWidget () {
+            width_chars = 7;
             label = "-";
         }
 

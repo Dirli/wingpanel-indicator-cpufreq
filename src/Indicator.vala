@@ -20,9 +20,7 @@ public class CPUfreq.Indicator : Wingpanel.Indicator {
     private CPUfreq.Services.Settings settings;
 
     public Indicator () {
-        Object (code_name : "cpufreq-indicator",
-                display_name : _("CPUfreq Indicator"),
-                description: _("CPUfreq Indicator is able to adjust the Intel p-state driver"));
+        Object (code_name : "cpufreq-indicator");
 
         settings = CPUfreq.Services.Settings.get_default ();
         on_settings_change("turbo-boost");
