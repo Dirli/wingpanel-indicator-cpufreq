@@ -1,7 +1,7 @@
-vala_compiler = meson.get_compiler('vala')
+vala_compiler = meson.get_compiler ('vala')
 
-shared_library(
-    meson.project_name(),
+shared_library (
+    meson.project_name (),
     'Indicator.vala',
     'Utils.vala',
     'Services/FreqManager.vala',
@@ -15,8 +15,8 @@ shared_library(
         dep_polkit,
         dep_granie,
         wingpanel_dep,
-        vala_compiler.find_library('posix'),
+        vala_compiler.find_library ('posix'),
     ],
     install: true,
-    install_dir: wingpanel_dep.get_pkgconfig_variable('indicatorsdir'),
+    install_dir: wingpanel_dep.get_pkgconfig_variable ('indicatorsdir'),
 )
