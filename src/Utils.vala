@@ -20,7 +20,7 @@ namespace CPUfreq {
             string content;
 
             try {
-                FileUtils.get_contents (file_path, out content);
+                GLib.FileUtils.get_contents (file_path, out content);
             } catch (Error e) {
                 warning (e.message);
                 return "";
@@ -35,7 +35,7 @@ namespace CPUfreq {
         }
 
         public static string get_governor (bool def_val = false) {
-            return Utils.get_content ((CPU_PATH + "cpu0/cpufreq/scaling_governor"));
+            return Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_governor");
         }
 
         public static string[] get_available_values (string path) {

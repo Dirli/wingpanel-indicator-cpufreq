@@ -5,7 +5,6 @@ shared_library (
     'Indicator.vala',
     'Utils.vala',
     'Services/FreqManager.vala',
-    'Services/Settings.vala',
     'Widgets/PanelWidget.vala',
     'Widgets/PopoverWidget.vala',
     dependencies: [

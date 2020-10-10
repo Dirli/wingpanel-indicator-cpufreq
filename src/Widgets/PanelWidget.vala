@@ -13,18 +13,14 @@
 */
 
 namespace CPUfreq {
-    public class WIdgets.PanelWidget : Gtk.Label {
+    public class Widgets.PanelWidget : Gtk.Label {
         public PanelWidget () {
             width_chars = 7;
             label = "-";
         }
 
         public void add_label (double freq_val) {
-            if (freq_val == 0) {
-                label = _("off");
-            } else {
-                label =  Utils.format_frequency (freq_val);
-            }
+            label = freq_val == 0 ? _("off") : Utils.format_frequency (freq_val);
 
             return;
         }

@@ -15,32 +15,29 @@
 namespace CPUfreq {
     public class Widgets.PopoverWidget : Gtk.Grid {
         private int top = 0;
-        private CPUfreq.Services.Settings settings;
+        private GLib.Settings settings;
         private Granite.Widgets.ModeButton gov_box;
         private string[] gov_vars;
 
-        public PopoverWidget () {
+        public PopoverWidget (GLib.Settings settings) {
             orientation = Gtk.Orientation.HORIZONTAL;
             hexpand = true;
             row_spacing = 2;
 
-            settings = CPUfreq.Services.Settings.get_default ();
+            this.settings = settings;
 
-            if (!FileUtils.test(CPU_PATH + "cpu0/cpufreq", FileTest.IS_DIR)) {
-                Gtk.Label label = new Gtk.Label (_("Your system does not support cpufreq manage"));
+            if (!GLib.FileUtils.test (CPU_PATH + "cpu0/cpufreq", FileTest.IS_DIR)) {
+                Gtk.Label label = new Gtk.Label (_("Your system does not support\n cpufreq manage"));
                 label.get_style_context ().add_class ("h2");
                 label.sensitive = false;
                 label.margin_top = label.margin_bottom = 24;
                 label.margin_start = label.margin_end = 12;
                 attach (label,  0, 0, 1, 1);
             } else {
-                string freq_driver = Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_driver");
-                if (freq_driver != "intel_pstate") {
-                    debug ("not yet implemented");
-                    /* string[] available_freqs = Utils.get_available_values ("frequencies"); */
-                } else {
+                if (GLib.FileUtils.test (CPU_PATH + "intel_pstate", FileTest.IS_DIR)) {
                     add_turbo_boost ();
                 }
+
                 add_governor ();
             }
         }
@@ -75,13 +72,13 @@ namespace CPUfreq {
 
         private unowned void toggled_governor () {
             if (Utils.get_permission ().allowed) {
-                settings.set_string("governor", gov_vars[gov_box.selected]);
+                settings.set_string ("governor", gov_vars[gov_box.selected]);
             }
         }
 
         private void add_turbo_boost () {
             Wingpanel.Widgets.Switch tb_switch = new Wingpanel.Widgets.Switch ("Turbo Boost", settings.get_boolean("turbo-boost"));
-            settings.bind("turbo-boost", tb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+            settings.bind ("turbo-boost", tb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
             attach (tb_switch, 0, top, 2, 1);
             ++top;
 

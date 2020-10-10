@@ -18,12 +18,7 @@ namespace CPUfreq {
             string state_str = state ? "0" : "1";
             string def_boost = Utils.get_content (CPU_PATH + "intel_pstate/no_turbo");
             if (def_boost != state_str && Utils.get_permission ().allowed) {
-                string cli_cmd = "-t ";
-                if (state) {
-                    cli_cmd += "on";
-                } else {
-                    cli_cmd += "off";
-                }
+                string cli_cmd = @"-t $(state ? "on" : "off")";
 
                 Utils.run_cli (cli_cmd);
             }
@@ -32,7 +27,7 @@ namespace CPUfreq {
         public static void set_freq_scaling (string adv, double new_val) {
             if (Utils.get_freq_pct (adv) != new_val && Utils.get_permission ().allowed) {
                 if (new_val >= 25 && new_val <= 100) {
-                    string cli_cmd = " -f %s:%.0f".printf(adv, new_val);
+                    string cli_cmd = " -f %s:%.0f".printf (adv, new_val);
                     Utils.run_cli (cli_cmd);
                 }
             }
