@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+* Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -29,7 +29,7 @@ public class CPUfreq.Indicator : Wingpanel.Indicator {
         on_settings_change ("pstate-min");
         settings.changed.connect (on_settings_change);
 
-        this.visible = true;
+        this.visible = Utils.can_manage ();
     }
 
     protected void on_settings_change (string key) {

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+* Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -16,6 +16,10 @@ namespace CPUfreq {
     public const string CPU_PATH = "/sys/devices/system/cpu/";
 
     public class Utils {
+        public static bool can_manage () {
+            return GLib.FileUtils.test (CPU_PATH + "cpu0/cpufreq", FileTest.IS_DIR);
+        }
+
         public static string get_content (string file_path) {
             string content;
 

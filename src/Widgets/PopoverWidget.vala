@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+* Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -26,7 +26,7 @@ namespace CPUfreq {
 
             this.settings = settings;
 
-            if (!GLib.FileUtils.test (CPU_PATH + "cpu0/cpufreq", FileTest.IS_DIR)) {
+            if (!Utils.can_manage ()) {
                 Gtk.Label label = new Gtk.Label (_("Your system does not support\n cpufreq manage"));
                 label.get_style_context ().add_class ("h2");
                 label.sensitive = false;
