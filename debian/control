@@ -2,7 +2,7 @@ Source: wingpanel-indicator-cpufreq
 Section: x11
 Priority: optional
 Maintainer: dirli <litandrej85@gmail.com>
-Build-Depends: debhelper (>= 11),
+Build-Depends: debhelper-compat (= 13),
                libgranite-dev,
                libpolkit-gobject-1-dev,
                libglib2.0-dev,
@@ -11,11 +11,13 @@ Build-Depends: debhelper (>= 11),
                policykit-1,
                meson,
                valac
-Standards-Version: 4.1.3
+Standards-Version: 4.5.0
 Homepage: https://github.com/Dirli/wingpanel-indicator-cpufreq
+Rules-Requires-Root: no
 
 Package: wingpanel-indicator-cpufreq
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Enhances: wingpanel
 Description: Wingpanel CPUfreq indicator to control processor frequency
  Wingpanel-indicator-cpufreq is able to adjust the Intel p-state driver (Sandy Bridge and newer)
