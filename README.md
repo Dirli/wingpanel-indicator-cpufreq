@@ -1,6 +1,14 @@
 # Wingpanel CPU frequency indicator
 wingpanel-indicator-cpufreq is able to adjust the Intel p-state driver (Sandy Bridge and newer)
 
+<p align="left">
+    <a href="https://paypal.me/Dirli85">
+        <img src="https://img.shields.io/badge/Donate-PayPal-green.svg">
+    </a>
+</p>
+
+NOTE I recently lost the ability to test turbo boost. if you can give me feedback that the latest changes are working correctly, it will be great
+
 ![Screenshot](data/screenshot1.png)  
 
 ### Popover
@@ -21,12 +29,8 @@ You'll need the following dependencies:
     meson
     valac
 
-Run `meson` to configure the build environment and then `ninja` to build
+How to build
 
     meson build --prefix=/usr
-    cd build
-    ninja
-
-To install, use `ninja install`
-
-    sudo ninja install
+    ninja -C build
+    sudo ninja -C build install
