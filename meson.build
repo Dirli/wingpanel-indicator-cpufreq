@@ -21,10 +21,10 @@ dep_granie = dependency ('granite')
 
 shared_library (
     meson.project_name (),
-    'Indicator.vala',
-    'Utils.vala',
-    'Widgets/PanelWidget.vala',
-    'Widgets/PopoverWidget.vala',
+    'src/Indicator.vala',
+    'src/Utils.vala',
+    'src/Widgets/PanelWidget.vala',
+    'src/Widgets/PopoverWidget.vala',
     dependencies: [
         dep_gtk3,
         dep_glib,
