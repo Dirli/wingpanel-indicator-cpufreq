@@ -14,41 +14,33 @@
 
 namespace CPUfreq {
     public class Widgets.PopoverWidget : Gtk.Grid {
-        private int top = 0;
         private GLib.Settings settings;
         private Granite.Widgets.ModeButton gov_box;
         private string[] gov_vars;
 
-        public PopoverWidget (GLib.Settings settings) {
+        public PopoverWidget (GLib.Settings settings, bool pstate) {
             orientation = Gtk.Orientation.HORIZONTAL;
             hexpand = true;
             row_spacing = 2;
 
             this.settings = settings;
 
-            if (!Utils.can_manage ()) {
-                Gtk.Label label = new Gtk.Label (_("Your system does not support\n cpufreq manage"));
-                label.get_style_context ().add_class ("h2");
-                label.sensitive = false;
-                label.margin_top = label.margin_bottom = 24;
-                label.margin_start = label.margin_end = 12;
-                attach (label,  0, 0, 1, 1);
-            } else {
-                if (GLib.FileUtils.test (CPU_PATH + "intel_pstate", FileTest.IS_DIR)) {
-                    add_turbo_boost ();
-                }
-
-                add_governor ();
+            int top = 0;
+            if (pstate) {
+                top = add_turbo_boost (top);
             }
+
+            add_governor (top);
         }
 
-        private void add_governor () {
+        private int add_governor (int top) {
+            var g_top = top;
+
             string current_governor = Utils.get_governor ();
 
             var separator = new Wingpanel.Widgets.Separator ();
             separator.hexpand = true;
-            attach (separator, 0, top, 2, 1);
-            ++top;
+            attach (separator, 0, g_top++, 2, 1);
 
             gov_box = new Granite.Widgets.ModeButton ();
             gov_box.orientation = Gtk.Orientation.VERTICAL;
@@ -65,9 +57,10 @@ namespace CPUfreq {
                 gov_vars[i] = gov;
             }
 
-            attach (gov_box, 0, top, 2, 1);
-            ++top;
+            attach (gov_box, 0, g_top++, 2, 1);
             gov_box.mode_changed.connect (toggled_governor);
+
+            return g_top;
         }
 
         private unowned void toggled_governor () {
@@ -76,43 +69,39 @@ namespace CPUfreq {
             }
         }
 
-        private void add_turbo_boost () {
-            Wingpanel.Widgets.Switch tb_switch = new Wingpanel.Widgets.Switch ("Turbo Boost", settings.get_boolean("turbo-boost"));
+        private int add_turbo_boost (int top) {
+            var tb_top = top;
+            var tb_switch = new Wingpanel.Widgets.Switch ("Turbo Boost", settings.get_boolean("turbo-boost"));
             settings.bind ("turbo-boost", tb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
-            attach (tb_switch, 0, top, 2, 1);
-            ++top;
+            attach (tb_switch, 0, tb_top++, 2, 1);
 
             var separator = new Wingpanel.Widgets.Separator ();
             separator.hexpand = true;
-            attach (separator, 0, top, 2, 1);
-            ++top;
+            attach (separator, 0, tb_top++, 2, 1);
 
-            Gtk.Label freq_label = new Gtk.Label (_("CPU frequency (%):"));
+            var freq_label = new Gtk.Label (_("CPU frequency (%):"));
             freq_label.halign = Gtk.Align.CENTER;
-            attach (freq_label, 0, top, 2, 1);
-            ++top;
+            attach (freq_label, 0, tb_top++, 2, 1);
 
             Gtk.Label min_label = new Gtk.Label (_("Min:"));
             min_label.margin_start = 15;
-            attach (min_label, 0, top, 1, 1);
+            attach (min_label, 0, tb_top, 1, 1);
             Gtk.Scale min_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 25, 100, 5);
             min_scale.margin_start = 15;
             min_scale.margin_end = 15;
             min_scale.hexpand = true;
             min_scale.set_value (Utils.get_freq_pct ("min"));
-            attach (min_scale, 1, top, 1, 1);
-            ++top;
+            attach (min_scale, 1, tb_top++, 1, 1);
 
             Gtk.Label max_label = new Gtk.Label (_("Max:"));
             max_label.margin_start = 15;
-            attach (max_label, 0, top, 1, 1);
+            attach (max_label, 0, tb_top, 1, 1);
             Gtk.Scale max_scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 25, 100, 5);
             max_scale.margin_start = 15;
             max_scale.margin_end = 15;
             max_scale.hexpand = true;
             max_scale.set_value (Utils.get_freq_pct ("max"));
-            attach (max_scale, 1, top, 1, 1);
-            ++top;
+            attach (max_scale, 1, tb_top++, 1, 1);
 
             min_scale.value_changed.connect (() => {
                 settings.set_double ("pstate-min", min_scale.get_value ());
@@ -120,6 +109,8 @@ namespace CPUfreq {
             max_scale.value_changed.connect (() => {
                 settings.set_double ("pstate-max", max_scale.get_value ());
             });
+
+            return tb_top;
         }
     }
 }

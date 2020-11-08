@@ -13,15 +13,56 @@
 */
 
 namespace CPUfreq {
-    public const string CPU_PATH = "/sys/devices/system/cpu/";
-
     public class Utils {
         public static bool can_manage () {
             return GLib.FileUtils.test (CPU_PATH + "cpu0/cpufreq", FileTest.IS_DIR);
         }
 
+        public static void set_turbo_boost (bool state) {
+            string state_str = state ? "0" : "1";
+            string def_boost = Utils.get_content (CPU_PATH + "intel_pstate/no_turbo");
+
+            if (def_boost != state_str && Utils.get_permission ().allowed) {
+                string cli_cmd = @"-t $(state ? "on" : "off")";
+
+                Utils.run_cli (cli_cmd);
+            }
+        }
+
+        public static string get_governor () {
+            return Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_governor");
+        }
+
+        public static void set_governor (string governor) {
+            string def_governor = Utils.get_governor ();
+
+            if (governor != "" && def_governor != governor) {
+                string cli_cmd = " -g " + governor;
+                Utils.run_cli (cli_cmd);
+            }
+        }
+
+        public static double get_freq_pct (string adv) {
+            string cur_freq_pct = Utils.get_content (CPU_PATH + "intel_pstate/" + adv + "_perf_pct");
+
+            return double.parse (cur_freq_pct);
+        }
+
+        public static void set_freq_scaling (string adv, double new_val) {
+            if (Utils.get_freq_pct (adv) != new_val && Utils.get_permission ().allowed) {
+                if (new_val >= 25 && new_val <= 100) {
+                    string cli_cmd = " -f %s:%.0f".printf (adv, new_val);
+                    Utils.run_cli (cli_cmd);
+                }
+            }
+        }
+
         public static string get_content (string file_path) {
             string content;
+
+            if (!GLib.FileUtils.test (file_path, GLib.FileTest.EXISTS)) {
+                return "";
+            }
 
             try {
                 GLib.FileUtils.get_contents (file_path, out content);
@@ -33,15 +74,6 @@ namespace CPUfreq {
             return content.chomp ();
         }
 
-        public static double get_freq_pct (string adv) {
-            string cur_freq_pct = Utils.get_content (CPU_PATH + "intel_pstate/" + adv + "_perf_pct");
-            return double.parse (cur_freq_pct);
-        }
-
-        public static string get_governor (bool def_val = false) {
-            return Utils.get_content (CPU_PATH + "cpu0/cpufreq/scaling_governor");
-        }
-
         public static string[] get_available_values (string path) {
             string val_str = Utils.get_content (CPU_PATH + @"cpu0/cpufreq/scaling_available_$path");
             return val_str.split (" ");
@@ -51,17 +83,14 @@ namespace CPUfreq {
             string cur_value;
             double maxcur = 0;
 
-            for (uint i = 0, isize = (int)get_num_processors (); i < isize; ++i) {
+            for (uint i = 0, isize = (int) GLib.get_num_processors (); i < isize; ++i) {
                 cur_value = Utils.get_content (CPU_PATH + @"cpu$i/cpufreq/scaling_cur_freq");
 
-                if (cur_value == "") {continue;}
-                var cur = double.parse (cur_value);
-
-                if (i == 0) {
-                    maxcur = cur;
-                } else {
-                    maxcur = double.max (cur, maxcur);
+                if (cur_value == "") {
+                    continue;
                 }
+                var cur = double.parse (cur_value);
+                maxcur = i == 0 ? cur : double.max (cur, maxcur);
             }
 
             return maxcur;
@@ -83,8 +112,6 @@ namespace CPUfreq {
             } catch (Error e) {
                 warning (e.message);
             }
-
-            return;
         }
 
         private static Polkit.Permission? permission = null;

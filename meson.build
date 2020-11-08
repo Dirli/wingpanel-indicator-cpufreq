@@ -19,8 +19,26 @@ dep_gobject = dependency ('gobject-2.0')
 dep_polkit = dependency ('polkit-gobject-1')
 dep_granie = dependency ('granite')
 
+shared_library (
+    meson.project_name (),
+    'Indicator.vala',
+    'Utils.vala',
+    'Widgets/PanelWidget.vala',
+    'Widgets/PopoverWidget.vala',
+    dependencies: [
+        dep_gtk3,
+        dep_glib,
+        dep_gobject,
+        dep_polkit,
+        dep_granie,
+        wingpanel_dep,
+        meson.get_compiler ('vala').find_library ('posix'),
+    ],
+    install: true,
+    install_dir: wingpanel_dep.get_pkgconfig_variable ('indicatorsdir'),
+)
+
 subdir ('data')
-subdir ('src')
 subdir ('po')
 
 meson.add_install_script ('meson/meson_post_install.py')
