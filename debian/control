@@ -7,7 +7,7 @@ Build-Depends: debhelper-compat (= 13),
                libpolkit-gobject-1-dev,
                libglib2.0-dev,
                libgtk-3-dev,
-               libwingpanel-2.0-dev,
+               libwingpanel-dev,
                policykit-1,
                meson,
                valac

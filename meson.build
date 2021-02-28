@@ -12,7 +12,7 @@ add_global_arguments (
     language:'c'
 )
 
-wingpanel_dep = dependency ('wingpanel-2.0')
+wingpanel_dep = dependency ('wingpanel')
 dep_gtk3 = dependency ('gtk+-3.0', version: '>=3.18')
 dep_glib = dependency ('glib-2.0', version: '>= 2.46.0')
 dep_gobject = dependency ('gobject-2.0')
