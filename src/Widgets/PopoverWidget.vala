@@ -38,7 +38,7 @@ namespace CPUfreq {
 
             string current_governor = Utils.get_governor ();
 
-            var separator = new Wingpanel.Widgets.Separator ();
+            var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
             separator.hexpand = true;
             attach (separator, 0, g_top++, 2, 1);
 
@@ -75,7 +75,7 @@ namespace CPUfreq {
             settings.bind ("turbo-boost", tb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
             attach (tb_switch, 0, tb_top++, 2, 1);
 
-            var separator = new Wingpanel.Widgets.Separator ();
+            var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
             separator.hexpand = true;
             attach (separator, 0, tb_top++, 2, 1);
 
