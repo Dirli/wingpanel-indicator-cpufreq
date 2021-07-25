@@ -1,3 +1,11 @@
+wingpanel-indicator-cpufreq (3.0.0-1) bullseye; urgency=medium
+
+  * Changed license on the GPL-3.0
+  * Replaced the Wingpanel.Separator with Gtk.Separator
+  * Replaced the Wingpanel.Widgets.Switch with Granite.SwitchModelButton
+
+ -- dirli <litandrej85@gmail.com>  Mon, 26 Jul 2021 01:35:48 +0300
+
 wingpanel-indicator-cpufreq (1.1.3-1) testing; urgency=medium
 
   * remove deprecated display_name and description
