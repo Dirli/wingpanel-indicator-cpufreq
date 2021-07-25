@@ -75,7 +75,8 @@ namespace CPUfreq {
 
         private int add_turbo_boost (int top) {
             var tb_top = top;
-            var tb_switch = new Wingpanel.Widgets.Switch ("Turbo Boost", settings.get_boolean("turbo-boost"));
+            var tb_switch = new Granite.SwitchModelButton ("Turbo Boost");
+            tb_switch.active = settings.get_boolean("turbo-boost");
             settings.bind ("turbo-boost", tb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
             attach (tb_switch, 0, tb_top++, 2, 1);
 
